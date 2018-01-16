@@ -4,24 +4,33 @@ import QtQuick.Window 2.2
 Window {
     visible: true
     title: qsTr("15 Puzzle")
-    width: Screen.width / 2
-    height: Screen.height / 2
+    width: 600
+    height: 400
+    Rectangle {
+        id: rec
+        width: parent.width - 200
+        height: parent.height
+        border.width: 2
     GridView {
-        width: Screen.width / 2
-        height: Screen.height / 2
-        model: mod
-        delegate : MyDel{}
+        width: parent.width
+        height: parent.height
+        model: MyDel{}
+        delegate :
+            Rectangle {
+            id: cell
+            height: 100
+            width: 100
+            color: "lightblue"
+            border.color: "cadetblue"
+            border.width: 2
+            radius: 10
+            visible: (name == 0) ? false : true
+            Text {
+                text: name
+                font.pixelSize: 10
+                anchors.centerIn: parent
+            }
+        }
     }
-    ListModel {
-        id: mod
-        ListElement {
-            name: "1"
-        }
-        ListElement {
-            name: "2"
-        }
-        ListElement {
-            name: "3"
-        }
     }
 }

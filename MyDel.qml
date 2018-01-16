@@ -1,15 +1,20 @@
 import QtQuick 2.0
 import QtQuick.Window 2.2
 
-Item {
-    id: mydel
-    Rectangle{
-        height: 200
-        width: 200
-        Text{
-            text: name
-            font.pixelSize: 12
-        }
-        border.width: 1
+ListModel {
+    ListElement{
+        name: 1
+    }
+    ListElement{
+        name: 2
+    }
+    ListElement{
+        name: 3
+    }
+    ListElement{
+        name: 4
+    }
+    ListElement{
+        name: 5
     }
 }
