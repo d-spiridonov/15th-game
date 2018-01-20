@@ -15,6 +15,7 @@ Window {
             id: appModel
         }
         GridView {
+
             id: gw
             width: parent.width
             height: parent.height
@@ -48,15 +49,31 @@ Window {
         focus: true;
     }
     Item {
-        id: check
+        id: check//TODO Cheange indexes and search by index!
         function swap(index){
-            console.log(index)
-             if (index !== 3 && index !== 7 && index !== 11 && index !== 15 && appModel.get(index + 1).txt === 0)
-             {
-                 console.log("moved")
-                 appModel.move(gw.currentIndex + index, gw.currentIndex + index + 1, 1)
-//                 appModel.move(gw.currentIndex + index + 1, gw.currentIndex + index -1, 1)
-             }
+            console.log(appModel.get(gw.indexAt(gw.contentItem.children[index].x + 100, gw.contentItem.children[index].y)).index)
+//             if (index !== 3 && index !== 7 && index !== 11 && index !== 15 && appModel.get(index + 1).txt === 0)
+//             {
+//                 console.log("moved")
+//                 appModel.move(gw.currentIndex + index, gw.currentIndex + index + 1, 1)
+//             }
+//             else if (index < 12 && appModel.get(index + 4).txt === 0)
+//             {
+//                 console.log("moved")
+//                 appModel.move(gw.currentIndex + index, gw.currentIndex + index + 4, 1)
+//                 appModel.move(gw.currentIndex + index + 3, gw.currentIndex + index, 1)
+//             }
+//             else if (index !== 1 && index !== 9 && index !== 13 && appModel.get(index - 1).txt === 0)
+//             {
+//                 console.log("moved")
+//                 appModel.move(gw.currentIndex + index + 1, gw.currentIndex + index, 1)
+//             }
+//             else if (index > 3 && appModel.get(index + 4).txt === 0)
+//             {
+//                 console.log("moved")
+//                 appModel.move(gw.currentIndex + index + 4, gw.currentIndex + index, 1)
+//                 appModel.move(gw.currentIndex + index, gw.currentIndex + index + 3, 1)
+//             }
         }
     }
     Item {
