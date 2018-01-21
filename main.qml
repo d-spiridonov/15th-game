@@ -15,7 +15,6 @@ Window {
             id: appModel
         }
         GridView {
-
             id: gw
             width: parent.width
             height: parent.height
@@ -63,7 +62,7 @@ Window {
                  appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) - 4, 1)
                  appModel.move(gw.indexAt(mouseX, mouseY) - 3, gw.indexAt(mouseX, mouseY), 1)
              }
-             else if (mouseX > 99.9 && appModel.get(gw.indexAt(mouseX, mouseY) - 1).txt === 0){
+             else if (mouseX > 100 && appModel.get(gw.indexAt(mouseX, mouseY) - 1).txt === 0){
                  console.log("moved left")
                  appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) - 1, 1)
              }
@@ -74,17 +73,37 @@ Window {
              }
         }
     }
+    Button {
+        id: button
+        x: 453
+        y: 21
+        text: qsTr("New Game")
+        MouseArea {
+            onClicked: {
+                if (appModel.count === 0){
+                    shuff.shuffle()
+                }
+                else {
+                    appModel.clear()
+                    shuff.shuffle()
+                }
+                console.log("shuffled")
+            }
+            anchors.fill: parent
+        }
+    }
+
     Item {
         id: shuff
         function shuffle(){
+            var array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
             for (var i = 0; i < 16; i++)
-                appModel.append({"index": i, "txt": func.randomNumber()})
+                appModel.append({"index": i, "txt": func.randomNumber(array)})
         }
     }
     Item {
         id: func
-        property var array : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-        function randomNumber(){
+        function randomNumber(array){
             var index;
             var tmp;
             index = Math.floor(Math.random() * (15 - 0 + 1)) + 0;
@@ -96,17 +115,4 @@ Window {
         }
     }
 
-    Button {
-        id: button
-        x: 453
-        y: 21
-        text: qsTr("New Game")
-        MouseArea {
-            onClicked: {
-                shuff.shuffle()
-                console.log("shuffled")
-            }
-            anchors.fill: parent
-        }
-    }
 }
