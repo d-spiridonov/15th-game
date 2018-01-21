@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
+import QtQuick.Dialogs 1.2
 
 Window {
     visible: true
@@ -8,6 +9,7 @@ Window {
     width: 600
     height: 400
     Rectangle {
+        id: mainwin
         width: parent.width - 200
         height: parent.height
         border.width: 2
@@ -71,6 +73,8 @@ Window {
                 appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) + 4, 1);
                 appModel.move(gw.indexAt(mouseX, mouseY) + 3, gw.indexAt(mouseX, mouseY), 1);
             }
+            if (checkWinner.check() === true)
+                winner.visible = true
         }
     }
     Button {
@@ -92,6 +96,36 @@ Window {
             anchors.fill: parent
         }
     }
+    Dialog {
+        id: winner
+        visible: false
+//        modality: Qt.WindowModal
+
+        contentItem: Rectangle {
+            color: "lightseagreen"
+            x: 0
+            implicitWidth: mainwin.width - 100
+            implicitHeight: 100
+            border.color: "black"
+            Text {
+                id: dialogTxt
+                text: qsTr("You win!")
+                color: "mintcream"
+                font.bold: true
+                anchors.centerIn: parent
+                font.family: "Helvetica"
+                font.pixelSize: 30
+                anchors{top: parent.top}
+            }
+            Button{
+                id: newGame
+                text: qsTr("New Game")
+                anchors{top: dialogTxt.bottom; left: parent.left}
+            }
+
+            //for button New game and exit
+        }
+    }
 
     Item {
         id: shuff
@@ -111,13 +145,27 @@ Window {
         }
         function shuffle(){
             var array = new Array();
-            while (array.length === 0 || checkvalid.isSolvable(array) === false)
-            {
-                var tmp = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-                randomize(array, tmp);
+//            while (array.length === 0 || checkvalid.isSolvable(array) === false)
+//            {
+//                var tmp = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+//                randomize(array, tmp);
+//            }
+            for (var j = 0; j < 16; j++){
+                  var tmp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0];
+                  appModel.append({"txt": tmp[j]});
+//                appModel.append({"txt": array[j]});
             }
-            for (var j = 0; j < 16; j++)
-                appModel.append({"txt": array[j]});
+        }
+    }
+
+    Item{
+        id: checkWinner
+        function check(){
+            for (var i = 1; i < 15; ++i){
+                if (appModel.get(i).txt < appModel.get(i - 1).txt)
+                    return false;
+            }
+            return true;
         }
     }
 
