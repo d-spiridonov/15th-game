@@ -53,24 +53,24 @@ Window {
     Item {
         id: check
         function swap(mouseX, mouseY){
-             if (mouseX < 300 && appModel.get(gw.indexAt(mouseX, mouseY) + 1).txt === 0){
-                 console.log("moved right")
-                 appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) + 1, 1)
-             }
-             else if (mouseY > 100 && appModel.get(gw.indexAt(mouseX, mouseY) - 4).txt === 0){
-                 console.log("moved up")
-                 appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) - 4, 1)
-                 appModel.move(gw.indexAt(mouseX, mouseY) - 3, gw.indexAt(mouseX, mouseY), 1)
-             }
-             else if (mouseX > 100 && appModel.get(gw.indexAt(mouseX, mouseY) - 1).txt === 0){
-                 console.log("moved left")
-                 appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) - 1, 1)
-             }
-             else if (mouseY < 300 && appModel.get(gw.indexAt(mouseX, mouseY) + 4).txt === 0){
-                 console.log("moved down")
-                 appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) + 4, 1)
-                 appModel.move(gw.indexAt(mouseX, mouseY) + 3, gw.indexAt(mouseX, mouseY), 1)
-             }
+            if (mouseX < 300 && appModel.get(gw.indexAt(mouseX, mouseY) + 1).txt === 0){
+                console.log("moved right");
+                appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) + 1, 1);
+            }
+            else if (mouseY > 100 && appModel.get(gw.indexAt(mouseX, mouseY) - 4).txt === 0){
+                console.log("moved up");
+                appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) - 4, 1);
+                appModel.move(gw.indexAt(mouseX, mouseY) - 3, gw.indexAt(mouseX, mouseY), 1);
+            }
+            else if (mouseX > 100 && appModel.get(gw.indexAt(mouseX, mouseY) - 1).txt === 0){
+                console.log("moved left")
+                appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) - 1, 1);
+            }
+            else if (mouseY < 300 && appModel.get(gw.indexAt(mouseX, mouseY) + 4).txt === 0){
+                console.log("moved down")
+                appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) + 4, 1);
+                appModel.move(gw.indexAt(mouseX, mouseY) + 3, gw.indexAt(mouseX, mouseY), 1);
+            }
         }
     }
     Button {
@@ -81,13 +81,13 @@ Window {
         MouseArea {
             onClicked: {
                 if (appModel.count === 0){
-                    shuff.shuffle()
+                    shuff.shuffle();
                 }
                 else {
-                    appModel.clear()
-                    shuff.shuffle()
+                    appModel.clear();
+                    shuff.shuffle();
                 }
-                console.log("shuffled")
+                console.log("shuffled");
             }
             anchors.fill: parent
         }
@@ -95,14 +95,6 @@ Window {
 
     Item {
         id: shuff
-        function shuffle(){
-            var array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-            for (var i = 0; i < 16; i++)
-                appModel.append({"index": i, "txt": func.randomNumber(array)})
-        }
-    }
-    Item {
-        id: func
         function randomNumber(array){
             var index;
             var tmp;
@@ -113,6 +105,63 @@ Window {
             array[index] = 16;
             return tmp;
         }
+        function randomize(array, tmp){
+            for (var i = 0; i < 16; i++)
+                array[i] = randomNumber(tmp);
+        }
+        function shuffle(){
+            var array = new Array();
+            while (array.length === 0 || checkvalid.isSolvable(array) === false)
+            {
+                var tmp = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+                randomize(array, tmp);
+            }
+            for (var j = 0; j < 16; j++)
+                appModel.append({"txt": array[j]});
+        }
     }
 
+    Item{
+        id: checkvalid
+        function getInvCount(array){
+            console.log("begin check valid");
+            var inv_count = 0;
+            for (var i = 0; i < 15; i++){
+                for (var j = i + 1; j < 16; j++){
+                    if (array[i] > array[j] && array[i] !== 0 && array[j] !== 0)
+                    {
+                        console.log("array[i] = " + array[i])
+                        console.log("array[j] = " + array[j])
+                        inv_count++;
+                    }
+                }
+                console.log("inv_count TMP =" + inv_count);
+            }
+            return inv_count;
+        }
+
+        function findXPosition(array){
+            for (var i = 0; array[i] !== 0; i++)
+                continue
+            if (i < 4)
+                return 1;
+            else if (i < 8)
+                return 2;
+            else if (i < 12)
+                return 3;
+            else if (i < 16)
+                return 4;
+        }
+        function isSolvable(array){
+            var invCount = getInvCount(array);
+            var pos = findXPosition(array);
+            console.log("inv count = " + invCount);
+            console.log("inv count = " + pos);
+            if ((pos % 2 === 0 && invCount % 2 > 0) || (pos % 2 > 0 && invCount === 0))
+                return true;
+            else
+                return false;
+        }
+    }
 }
+
