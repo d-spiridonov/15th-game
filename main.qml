@@ -37,43 +37,47 @@ Window {
                     anchors.centerIn: parent
                 }
                 visible: (txt1.text === "0") ? false : true
-                MouseArea {
-                    onClicked: {
-                        check.swap(index)
-                    }
-                    id: mouseArea
-                    anchors.fill: parent
+            }
+            MouseArea {
+                onClicked: {
+                    check.swap(mouseX, mouseY)
                 }
+                id: mouseArea
+                anchors.fill: parent
             }
         }
         focus: true;
     }
     Item {
         id: check//TODO Cheange indexes and search by index!
-        function swap(index){
-            console.log(appModel.get(gw.indexAt(gw.contentItem.children[index].x + 100, gw.contentItem.children[index].y)).index)
-//             if (index !== 3 && index !== 7 && index !== 11 && index !== 15 && appModel.get(index + 1).txt === 0)
-//             {
-//                 console.log("moved")
-//                 appModel.move(gw.currentIndex + index, gw.currentIndex + index + 1, 1)
-//             }
-//             else if (index < 12 && appModel.get(index + 4).txt === 0)
-//             {
-//                 console.log("moved")
-//                 appModel.move(gw.currentIndex + index, gw.currentIndex + index + 4, 1)
-//                 appModel.move(gw.currentIndex + index + 3, gw.currentIndex + index, 1)
-//             }
-//             else if (index !== 1 && index !== 9 && index !== 13 && appModel.get(index - 1).txt === 0)
-//             {
-//                 console.log("moved")
-//                 appModel.move(gw.currentIndex + index + 1, gw.currentIndex + index, 1)
-//             }
-//             else if (index > 3 && appModel.get(index + 4).txt === 0)
-//             {
-//                 console.log("moved")
-//                 appModel.move(gw.currentIndex + index + 4, gw.currentIndex + index, 1)
-//                 appModel.move(gw.currentIndex + index, gw.currentIndex + index + 3, 1)
-//             }
+        function swap(mouseX, mouseY){
+            var tmp
+            console.log(mouseX)
+            console.log(mouseY)
+//            console.log(gw.indexAt(mouseX, mouseY))
+//            console.log(appModel.get(gw.indexAt(mouseX, mouseY)).txt)
+             if (mouseX < 300 && appModel.get(gw.indexAt(mouseX, mouseY) + 1).txt === 0)
+             {
+                 console.log("moved right")
+                 appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) + 1, 1)
+             }
+             else if (mouseY > 100 && appModel.get(gw.indexAt(mouseX, mouseY) - 4).txt === 0)
+             {
+                 console.log("moved up")
+                 appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) - 4, 1)
+                 appModel.move(gw.indexAt(mouseX, mouseY) - 3, gw.indexAt(mouseX, mouseY), 1)
+             }
+             else if (mouseX > 99.9 && appModel.get(gw.indexAt(mouseX, mouseY) - 1).txt === 0)
+             {
+                 console.log("moved left")
+                 appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) - 1, 1)
+             }
+             else if (mouseY < 300 && appModel.get(gw.indexAt(mouseX, mouseY) + 4).txt === 0)
+             {
+                 console.log("moved down")
+                 appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) + 4, 1)
+                 appModel.move(gw.indexAt(mouseX, mouseY) + 3, gw.indexAt(mouseX, mouseY), 1)
+             }
         }
     }
     Item {
