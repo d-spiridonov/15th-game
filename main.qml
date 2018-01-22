@@ -42,7 +42,7 @@ Window {
             }
             MouseArea {
                 onClicked: {
-                    check.swap(mouseX, mouseY)
+                    check.swap(gw.indexAt(mouseX, mouseY))
                 }
                 id: mouseArea
                 anchors.fill: parent
@@ -55,24 +55,25 @@ Window {
     }
     Item {
         id: check
-        function swap(mouseX, mouseY){
-            if (mouseX < 300 && appModel.get(gw.indexAt(mouseX, mouseY) + 1).txt === 0){
+        function swap(index){
+            console.log(index);
+            if (index !== 3 && index !== 7 && index !== 11 && index !== 15 && appModel.get(index + 1).txt === 0){
                 console.log("moved right");
-                appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) + 1, 1);
+                appModel.move(index, index + 1, 1);
             }
-            else if (mouseY > 100 && appModel.get(gw.indexAt(mouseX, mouseY) - 4).txt === 0){
+            else if (index > 3 && appModel.get(index - 4).txt === 0){
                 console.log("moved up");
-                appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) - 4, 1);
-                appModel.move(gw.indexAt(mouseX, mouseY) - 3, gw.indexAt(mouseX, mouseY), 1);
+                appModel.move(index, index - 4, 1);
+                appModel.move(index - 3, index, 1);
             }
-            else if (mouseX > 100 && appModel.get(gw.indexAt(mouseX, mouseY) - 1).txt === 0){
+            else if (index !== 0 && index !== 4 && index !== 8 && index !== 12 && appModel.get(index - 1).txt === 0){
                 console.log("moved left")
-                appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) - 1, 1);
+                appModel.move(index, index - 1, 1);
             }
-            else if (mouseY < 300 && appModel.get(gw.indexAt(mouseX, mouseY) + 4).txt === 0){
+            else if (index < 13 && appModel.get(index + 4).txt === 0){
                 console.log("moved down")
-                appModel.move(gw.indexAt(mouseX, mouseY), gw.indexAt(mouseX, mouseY) + 4, 1);
-                appModel.move(gw.indexAt(mouseX, mouseY) + 3, gw.indexAt(mouseX, mouseY), 1);
+                appModel.move(index, index + 4, 1);
+                appModel.move(index + 3, index, 1);
             }
             if (checkWinner.check() === true)
                 winner.visible = true
