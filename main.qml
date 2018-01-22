@@ -99,31 +99,42 @@ Window {
     Dialog {
         id: winner
         visible: false
-//        modality: Qt.WindowModal
 
         contentItem: Rectangle {
             color: "lightseagreen"
-            x: 0
             implicitWidth: mainwin.width - 100
-            implicitHeight: 100
+            implicitHeight: mainwin.height / 4
             border.color: "black"
             Text {
                 id: dialogTxt
                 text: qsTr("You win!")
                 color: "mintcream"
                 font.bold: true
-                anchors.centerIn: parent
                 font.family: "Helvetica"
                 font.pixelSize: 30
-                anchors{top: parent.top}
+                anchors{top: parent.top; topMargin: 20; right: parent.right; rightMargin: parent.width / 5;
+                left: parent.left; leftMargin: parent.width - 200}
             }
             Button{
                 id: newGame
                 text: qsTr("New Game")
-                anchors{top: dialogTxt.bottom; left: parent.left}
+                anchors{top: dialogTxt.bottom;topMargin: 10; left: parent.left; leftMargin: 20}
+                height: parent.height / 5
+                onClicked: {
+                    appModel.clear();
+                    shuff.shuffle();
+                    winner.close();
+                }
             }
-
-            //for button New game and exit
+            Button{
+                id: exit
+                text: qsTr("Exit")
+                anchors{top: dialogTxt.bottom; topMargin: 10; right: parent.right; rightMargin: 20}
+                height: parent.height / 5
+                onClicked: {
+                    Qt.quit();
+                }
+            }
         }
     }
 
