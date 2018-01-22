@@ -3,8 +3,6 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Styles 1.4
-import QtLocation 5.6
-import QtPositioning 5.5
 import "logic.js" as Logic
 
 Window {
@@ -52,6 +50,7 @@ Window {
             cellWidth: gv.width / 4
             cellHeight: gv.height / 4
             model: appModel
+            interactive: false
             delegate :
                 Rectangle {
                 id: rect
@@ -85,8 +84,8 @@ Window {
     }
     Button {
         id: newgame
-        anchors{left: mainwin.right; leftMargin: 30; top: mainwin.top; topMargin: 70;
-            right: win.right; rightMargin: 30;}
+        anchors{left: mainwin.right; leftMargin: 20; top: mainwin.top; topMargin: 70;
+            right: win.right; rightMargin: 20;}
         width: parent.width / 4
         height: parent.height / 5
         Text{
@@ -106,8 +105,8 @@ Window {
     }
     Button {
         id: quit
-        anchors{left: mainwin.right; leftMargin: 30; top: mainwin.top;
-            topMargin: 200; right: win.right; rightMargin: 30}
+        anchors{left: mainwin.right; leftMargin: 20; top: mainwin.top;
+            topMargin: 200; right: win.right; rightMargin: 20}
         width: parent.width / 4
         height: parent.height / 5
         Text{

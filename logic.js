@@ -22,10 +22,10 @@ function randomNumber(array){
     var index;
     var tmp;
     index = Math.floor(Math.random() * (15 - 0 + 1)) + 0;
-    while (array[index] === 16)
+    while (array[index] === -1)
         index = Math.floor(Math.random() * (15 - 0 + 1)) + 0;
     tmp = array[index];
-    array[index] = 16;
+    array[index] = -1;
     return tmp;
 }
 
@@ -35,16 +35,16 @@ function randomize(array, tmp){
 }
 
 function shuffle(){
-    var array = new Array();
-    while (array.length === 0 || isSolvable(array) === false)
-    {
-        var tmp = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-        randomize(array, tmp);
-    }
-    for (var j = 0; j < 16; j++){
-        var tmp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0];
-        appModel.append({"txt": array[j]});
-    }
+    var array = [];
+      do{
+          var tmp = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+          randomize(array, tmp);
+      }
+      while (array.length === 0 || isSolvable(array) === false);
+
+      for (var j = 0; j < 16; j++){
+          appModel.append({"txt": array[j]});
+      }
 }
 
 function checkwinner(){
