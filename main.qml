@@ -3,6 +3,9 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Styles 1.4
+import QtLocation 5.6
+import QtPositioning 5.5
+import "logic.js" as Logic
 
 Window {
     visible: true
@@ -43,17 +46,17 @@ Window {
             ListElement{txt: 0}
         }
         GridView {
-            id: gw
+            id: gv
             width: parent.width
             height: parent.height
-            cellWidth: gw.width / 4
-            cellHeight: gw.height / 4
+            cellWidth: gv.width / 4
+            cellHeight: gv.height / 4
             model: appModel
             delegate :
                 Rectangle {
                 id: rect
-                height: gw.cellHeight - 3
-                width: gw.cellWidth - 3
+                height: gv.cellHeight - 3
+                width: gv.cellWidth - 3
                 color: "lightskyblue"
                 border.color: "cadetblue"
                 border.width: 2
@@ -61,54 +64,29 @@ Window {
                 Text {
                     id:txt1
                     text: txt
-                    font.pixelSize: 10
+                    font.family: "Helvetica"
+                    font.pixelSize: 25
                     anchors.centerIn: parent
                 }
                 visible: (txt1.text === "0") ? false : true
             }
             MouseArea {
+                visible: false
                 onClicked: {
-                    check.swap(gw.indexAt(mouseX, mouseY))
+                    Logic.swap(gv.indexAt(mouseX, mouseY))
                 }
-                id: mouseArea
+                id: gameArea
                 anchors.fill: parent
             }
             move: Transition {
                 NumberAnimation { duration: 200; properties: "x,y" }
             }
         }
-        focus: true;
-    }
-    Item {
-        id: check
-        function swap(index){
-            console.log(index);
-            if (index !== 3 && index !== 7 && index !== 11 && index !== 15 && appModel.get(index + 1).txt === 0){
-                console.log("moved right");
-                appModel.move(index, index + 1, 1);
-            }
-            else if (index > 3 && appModel.get(index - 4).txt === 0){
-                console.log("moved up");
-                appModel.move(index, index - 4, 1);
-                appModel.move(index - 3, index, 1);
-            }
-            else if (index !== 0 && index !== 4 && index !== 8 && index !== 12 && appModel.get(index - 1).txt === 0){
-                console.log("moved left")
-                appModel.move(index, index - 1, 1);
-            }
-            else if (index < 13 && appModel.get(index + 4).txt === 0){
-                console.log("moved down")
-                appModel.move(index, index + 4, 1);
-                appModel.move(index + 3, index, 1);
-            }
-            if (checkWinner.check() === true)
-                winner.visible = true
-        }
     }
     Button {
         id: newgame
-        anchors{left: mainwin.right; leftMargin: 30; top: mainwin.top; topMargin: 70; right: win.right; rightMargin: 30;
-            /*bottom: win.bottom; bottomMargin: 250*/}
+        anchors{left: mainwin.right; leftMargin: 30; top: mainwin.top; topMargin: 70;
+            right: win.right; rightMargin: 30;}
         width: parent.width / 4
         height: parent.height / 5
         Text{
@@ -119,16 +97,17 @@ Window {
         }
         MouseArea {
             onClicked: {
+                gameArea.visible = true;
                 appModel.clear();
-                shuff.shuffle();
-                console.log("shuffled");
+                Logic.shuffle();
             }
             anchors.fill: parent
         }
     }
     Button {
         id: quit
-        anchors{left: mainwin.right; leftMargin: 30; top: mainwin.top; topMargin: 200; right: win.right; rightMargin: 30}
+        anchors{left: mainwin.right; leftMargin: 30; top: mainwin.top;
+            topMargin: 200; right: win.right; rightMargin: 30}
         width: parent.width / 4
         height: parent.height / 5
         Text{
@@ -169,7 +148,7 @@ Window {
                 height: parent.height / 5
                 onClicked: {
                     appModel.clear();
-                    shuff.shuffle();
+                    Logic.shuffle();
                     winner.close();
                 }
             }
@@ -182,89 +161,6 @@ Window {
                     Qt.quit();
                 }
             }
-        }
-    }
-    Item {
-        id: shuff
-        function randomNumber(array){
-            var index;
-            var tmp;
-            index = Math.floor(Math.random() * (15 - 0 + 1)) + 0;
-            while (array[index] === 16)
-                index = Math.floor(Math.random() * (15 - 0 + 1)) + 0;
-            tmp = array[index];
-            array[index] = 16;
-            return tmp;
-        }
-        function randomize(array, tmp){
-            for (var i = 0; i < 16; i++)
-                array[i] = randomNumber(tmp);
-        }
-        function shuffle(){
-            var array = new Array();
-            while (array.length === 0 || checkvalid.isSolvable(array) === false)
-            {
-                var tmp = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-                randomize(array, tmp);
-            }
-            for (var j = 0; j < 16; j++){
-                var tmp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0];
-                appModel.append({"txt": array[j]});
-            }
-        }
-    }
-
-    Item{
-        id: checkWinner
-        function check(){
-            for (var i = 1; i < 15; ++i){
-                if (appModel.get(i).txt < appModel.get(i - 1).txt)
-                    return false;
-            }
-            return true;
-        }
-    }
-
-    Item{
-        id: checkvalid
-        function getInvCount(array){
-            console.log("begin check valid");
-            var inv_count = 0;
-            for (var i = 0; i < 15; i++){
-                for (var j = i + 1; j < 16; j++){
-                    if (array[i] > array[j] && array[i] !== 0 && array[j] !== 0)
-                    {
-                        console.log("array[i] = " + array[i])
-                        console.log("array[j] = " + array[j])
-                        inv_count++;
-                    }
-                }
-                console.log("inv_count TMP =" + inv_count);
-            }
-            return inv_count;
-        }
-
-        function findXPosition(array){
-            for (var i = 0; array[i] !== 0; i++)
-                continue
-            if (i < 4)
-                return 1;
-            else if (i < 8)
-                return 2;
-            else if (i < 12)
-                return 3;
-            else if (i < 16)
-                return 4;
-        }
-        function isSolvable(array){
-            var invCount = getInvCount(array);
-            var pos = findXPosition(array);
-            console.log("inv count = " + invCount);
-            console.log("inv count = " + pos);
-            if ((pos % 2 === 0 && invCount % 2 > 0) || (pos % 2 > 0 && invCount === 0))
-                return true;
-            else
-                return false;
         }
     }
 }
