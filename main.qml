@@ -20,17 +20,18 @@ Window {
             id: gw
             width: parent.width
             height: parent.height
+            cellWidth: gw.width / 4
+            cellHeight: gw.height / 4
             model: appModel
             delegate :
                 Rectangle {
                 id: rect
-                height: 100
-                width: 100
+                height: gw.cellHeight - 3
+                width: gw.cellWidth - 3
                 color: "lightblue"
                 border.color: "cadetblue"
                 border.width: 2
                 radius: 10
-                state: ''
                 Text {
                     id:txt1
                     text: txt
