@@ -13,15 +13,34 @@ Window {
         id: win
         width: parent.width
         height: parent.height
-        visible: false
+        visible: true
+        color: "powderblue"
     }
     Rectangle {
         id: mainwin
         width: parent.width - parent.width / 4
         height: parent.height
-        border.width: 2
+        border.width: 3
+        border.color: "grey"
+        color: "snow"
         ListModel{
             id: appModel
+            ListElement{txt: 1}
+            ListElement{txt: 2}
+            ListElement{txt: 3}
+            ListElement{txt: 4}
+            ListElement{txt: 5}
+            ListElement{txt: 6}
+            ListElement{txt: 7}
+            ListElement{txt: 8}
+            ListElement{txt: 9}
+            ListElement{txt: 10}
+            ListElement{txt: 11}
+            ListElement{txt: 12}
+            ListElement{txt: 13}
+            ListElement{txt: 14}
+            ListElement{txt: 15}
+            ListElement{txt: 0}
         }
         GridView {
             id: gw
@@ -35,7 +54,7 @@ Window {
                 id: rect
                 height: gw.cellHeight - 3
                 width: gw.cellWidth - 3
-                color: "lightblue"
+                color: "lightskyblue"
                 border.color: "cadetblue"
                 border.width: 2
                 radius: 10
@@ -58,7 +77,7 @@ Window {
                 NumberAnimation { duration: 200; properties: "x,y" }
             }
         }
-        focus: true; 
+        focus: true;
     }
     Item {
         id: check
@@ -89,7 +108,7 @@ Window {
     Button {
         id: newgame
         anchors{left: mainwin.right; leftMargin: 30; top: mainwin.top; topMargin: 70; right: win.right; rightMargin: 30;
-        /*bottom: win.bottom; bottomMargin: 250*/}
+            /*bottom: win.bottom; bottomMargin: 250*/}
         width: parent.width / 4
         height: parent.height / 5
         Text{
@@ -100,13 +119,8 @@ Window {
         }
         MouseArea {
             onClicked: {
-                if (appModel.count === 0){
-                    shuff.shuffle();
-                }
-                else {
-                    appModel.clear();
-                    shuff.shuffle();
-                }
+                appModel.clear();
+                shuff.shuffle();
                 console.log("shuffled");
             }
             anchors.fill: parent
@@ -146,8 +160,7 @@ Window {
                 font.bold: true
                 font.family: "Helvetica"
                 font.pixelSize: 30
-                anchors{top: parent.top; topMargin: 20; right: parent.right; rightMargin: parent.width / 5;
-                left: parent.left; leftMargin: parent.width - 200}
+                anchors.centerIn: parent
             }
             Button{
                 id: newGame
@@ -171,7 +184,6 @@ Window {
             }
         }
     }
-
     Item {
         id: shuff
         function randomNumber(array){
@@ -190,15 +202,14 @@ Window {
         }
         function shuffle(){
             var array = new Array();
-//            while (array.length === 0 || checkvalid.isSolvable(array) === false)
-//            {
-//                var tmp = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-//                randomize(array, tmp);
-//            }
+            while (array.length === 0 || checkvalid.isSolvable(array) === false)
+            {
+                var tmp = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+                randomize(array, tmp);
+            }
             for (var j = 0; j < 16; j++){
-                  var tmp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0];
-                  appModel.append({"txt": tmp[j]});
-//                appModel.append({"txt": array[j]});
+                var tmp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0];
+                appModel.append({"txt": array[j]});
             }
         }
     }
