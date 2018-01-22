@@ -2,15 +2,22 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
+import QtQuick.Controls.Styles 1.4
 
 Window {
     visible: true
     title: qsTr("15 Puzzle")
     width: 600
     height: 400
+    Rectangle{
+        id: win
+        width: parent.width
+        height: parent.height
+        visible: false
+    }
     Rectangle {
         id: mainwin
-        width: parent.width - 200
+        width: parent.width - parent.width / 4
         height: parent.height
         border.width: 2
         ListModel{
@@ -51,7 +58,7 @@ Window {
                 NumberAnimation { duration: 200; properties: "x,y" }
             }
         }
-        focus: true;
+        focus: true; 
     }
     Item {
         id: check
@@ -80,10 +87,17 @@ Window {
         }
     }
     Button {
-        id: button
-        x: 453
-        y: 21
-        text: qsTr("New Game")
+        id: newgame
+        anchors{left: mainwin.right; leftMargin: 30; top: mainwin.top; topMargin: 70; right: win.right; rightMargin: 30;
+        /*bottom: win.bottom; bottomMargin: 250*/}
+        width: parent.width / 4
+        height: parent.height / 5
+        Text{
+            text: qsTr("New Game")
+            anchors.centerIn: parent
+            font.family: "Calibri"
+            font.bold: true
+        }
         MouseArea {
             onClicked: {
                 if (appModel.count === 0){
@@ -94,6 +108,24 @@ Window {
                     shuff.shuffle();
                 }
                 console.log("shuffled");
+            }
+            anchors.fill: parent
+        }
+    }
+    Button {
+        id: quit
+        anchors{left: mainwin.right; leftMargin: 30; top: mainwin.top; topMargin: 200; right: win.right; rightMargin: 30}
+        width: parent.width / 4
+        height: parent.height / 5
+        Text{
+            text: qsTr("Quit")
+            anchors.centerIn: parent
+            font.family: "Calibri"
+            font.bold: true
+        }
+        MouseArea {
+            onClicked: {
+                Qt.quit()
             }
             anchors.fill: parent
         }
